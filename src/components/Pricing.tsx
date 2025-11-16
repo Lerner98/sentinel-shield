@@ -1,5 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { stripeService } from "@/services/stripeService";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 const plans = [
   {
@@ -55,6 +60,60 @@ const plans = [
 ];
 
 export const Pricing = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const [loading, setLoading] = useState<string | null>(null);
+
+  const handlePlanClick = async (planName: string) => {
+    if (planName === "Enterprise") {
+      // Contact sales for enterprise
+      window.location.href = "mailto:sales@vulnscan.com?subject=Enterprise Plan Inquiry";
+      return;
+    }
+
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+
+    setLoading(planName);
+
+    // Map plan names to tier and price IDs
+    const tierMap: Record<string, "free" | "professional" | "enterprise"> = {
+      "Starter": "professional",
+      "Professional": "professional",
+    };
+
+    const priceIdMap: Record<string, string> = {
+      "Starter": "STRIPE_PRICE_ID_STARTER",
+      "Professional": "STRIPE_PRICE_ID_PRO",
+    };
+
+    const tier = tierMap[planName];
+    const priceId = priceIdMap[planName];
+
+    const result = await stripeService.createCheckoutSession({
+      priceId,
+      userId: user.id,
+      tier,
+    });
+
+    if (result.error) {
+      toast({
+        title: "Error",
+        description: result.error.message,
+        variant: "destructive",
+      });
+      setLoading(null);
+      return;
+    }
+
+    if (result.data?.url) {
+      window.location.href = result.data.url;
+    }
+  };
+
   return (
     <section className="py-12 md:py-20 lg:py-28 relative">
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
@@ -103,6 +162,8 @@ export const Pricing = () => {
               </div>
               
               <Button 
+                onClick={() => handlePlanClick(plan.name)}
+                disabled={loading === plan.name}
                 className={`
                   w-full h-12 mb-8
                   ${plan.popular 
@@ -113,7 +174,7 @@ export const Pricing = () => {
                 `}
                 variant={plan.popular ? "default" : "outline"}
               >
-                {plan.cta}
+                {loading === plan.name ? "Loading..." : plan.cta}
               </Button>
               
               <ul className="space-y-3">

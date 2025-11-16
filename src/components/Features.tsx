@@ -1,4 +1,7 @@
 import { Shield, Zap, Lock, Eye, RefreshCw, TrendingUp } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 
 const features = [
   {
@@ -34,6 +37,7 @@ const features = [
 ];
 
 export const Features = () => {
+  const navigate = useNavigate();
   return (
     <section className="py-12 md:py-20 lg:py-28 relative">
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
@@ -68,6 +72,32 @@ export const Features = () => {
               </p>
             </div>
           ))}
+        </div>
+
+        <div className="mt-16 text-center space-y-6">
+          <h3 className="text-2xl md:text-3xl font-bold">
+            Learn More About Our Services
+          </h3>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => navigate("/services/vulnerability-scanning")}
+              className="border-primary/50 hover:bg-primary/10"
+            >
+              Vulnerability Scanning
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              onClick={() => navigate("/services/integration")}
+              className="border-primary/50 hover:bg-primary/10"
+            >
+              Integration Guide
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
     </section>
