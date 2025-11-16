@@ -1,21 +1,24 @@
 import { Button } from "@/components/ui/button";
 import { Shield, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { user } = useAuth();
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-lg transition-all duration-300">
       <div className="w-full mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
               <Shield className="w-6 h-6 text-neutral-950" />
             </div>
             <span className="text-xl font-bold text-foreground">CyberDefense</span>
-          </div>
+          </Link>
           
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
@@ -47,17 +50,31 @@ export const Header = () => {
           
           {/* CTA Buttons */}
           <div className="hidden md:flex items-center gap-4">
-            <Button 
-              variant="ghost" 
-              className="bg-transparent text-foreground hover:bg-accent/10 active:scale-95 transition-all"
-            >
-              Sign In
-            </Button>
-            <Button 
-              className="bg-primary text-neutral-950 hover:bg-primary/90 hover:shadow-[0_0_20px_hsl(188_100%_50%/0.3)] active:scale-95 transition-all"
-            >
-              Get Started
-            </Button>
+            {user ? (
+              <Link to="/dashboard">
+                <Button className="bg-primary text-neutral-950 hover:bg-primary/90 hover:shadow-[0_0_20px_hsl(188_100%_50%/0.3)] active:scale-95 transition-all">
+                  Dashboard
+                </Button>
+              </Link>
+            ) : (
+              <>
+                <Link to="/auth">
+                  <Button 
+                    variant="ghost" 
+                    className="bg-transparent text-foreground hover:bg-accent/10 active:scale-95 transition-all"
+                  >
+                    Sign In
+                  </Button>
+                </Link>
+                <Link to="/auth">
+                  <Button 
+                    className="bg-primary text-neutral-950 hover:bg-primary/90 hover:shadow-[0_0_20px_hsl(188_100%_50%/0.3)] active:scale-95 transition-all"
+                  >
+                    Get Started
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
           
           {/* Mobile menu button */}
