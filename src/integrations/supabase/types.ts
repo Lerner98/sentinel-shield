@@ -14,16 +14,222 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          company_name: string | null
+          created_at: string
+          email: string
+          full_name: string | null
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          company_name?: string | null
+          created_at?: string
+          email: string
+          full_name?: string | null
+          id: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          company_name?: string | null
+          created_at?: string
+          email?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      scan_findings: {
+        Row: {
+          affected_component: string | null
+          created_at: string
+          cve_id: string | null
+          description: string
+          id: string
+          reference_urls: string[] | null
+          remediation_steps: string | null
+          scan_id: string
+          severity: Database["public"]["Enums"]["severity_level"]
+          title: string
+        }
+        Insert: {
+          affected_component?: string | null
+          created_at?: string
+          cve_id?: string | null
+          description: string
+          id?: string
+          reference_urls?: string[] | null
+          remediation_steps?: string | null
+          scan_id: string
+          severity: Database["public"]["Enums"]["severity_level"]
+          title: string
+        }
+        Update: {
+          affected_component?: string | null
+          created_at?: string
+          cve_id?: string | null
+          description?: string
+          id?: string
+          reference_urls?: string[] | null
+          remediation_steps?: string | null
+          scan_id?: string
+          severity?: Database["public"]["Enums"]["severity_level"]
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scan_findings_scan_id_fkey"
+            columns: ["scan_id"]
+            isOneToOne: false
+            referencedRelation: "vulnerability_scans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscriptions: {
+        Row: {
+          cancel_at_period_end: boolean | null
+          created_at: string
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          status: Database["public"]["Enums"]["subscription_status"]
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          tier: Database["public"]["Enums"]["subscription_tier"]
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cancel_at_period_end?: boolean | null
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          status?: Database["public"]["Enums"]["subscription_status"]
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          tier?: Database["public"]["Enums"]["subscription_tier"]
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cancel_at_period_end?: boolean | null
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          status?: Database["public"]["Enums"]["subscription_status"]
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          tier?: Database["public"]["Enums"]["subscription_tier"]
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      vulnerability_scans: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          critical_count: number | null
+          high_count: number | null
+          id: string
+          info_count: number | null
+          low_count: number | null
+          medium_count: number | null
+          scan_name: string
+          scan_type: string
+          started_at: string | null
+          status: Database["public"]["Enums"]["scan_status"]
+          target_url: string
+          total_vulnerabilities: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          critical_count?: number | null
+          high_count?: number | null
+          id?: string
+          info_count?: number | null
+          low_count?: number | null
+          medium_count?: number | null
+          scan_name: string
+          scan_type: string
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["scan_status"]
+          target_url: string
+          total_vulnerabilities?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          critical_count?: number | null
+          high_count?: number | null
+          id?: string
+          info_count?: number | null
+          low_count?: number | null
+          medium_count?: number | null
+          scan_name?: string
+          scan_type?: string
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["scan_status"]
+          target_url?: string
+          total_vulnerabilities?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "user"
+      scan_status: "pending" | "running" | "completed" | "failed"
+      severity_level: "critical" | "high" | "medium" | "low" | "info"
+      subscription_status: "active" | "canceled" | "past_due" | "trialing"
+      subscription_tier: "free" | "professional" | "enterprise"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +356,12 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "user"],
+      scan_status: ["pending", "running", "completed", "failed"],
+      severity_level: ["critical", "high", "medium", "low", "info"],
+      subscription_status: ["active", "canceled", "past_due", "trialing"],
+      subscription_tier: ["free", "professional", "enterprise"],
+    },
   },
 } as const
