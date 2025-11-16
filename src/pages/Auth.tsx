@@ -58,7 +58,7 @@ export default function Auth() {
           </p>
         </div>
 
-        <Card className={GLOBAL_STYLES.cards.variants.solid}>
+        <Card className={`${GLOBAL_STYLES.cards.variants.solid} p-8`}>
           <form onSubmit={handleSubmit} className="space-y-6">
             {!isLogin && (
               <div className="space-y-2">

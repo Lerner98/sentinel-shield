@@ -41,8 +41,54 @@ serve(async (req) => {
       );
     }
 
-    // Parse request body
-    const { scan_name, target_url, scan_type } = await req.json();
+    // Parse and validate request body
+    const body = await req.json();
+    const { scan_name, target_url, scan_type } = body;
+
+    // Input validation
+    if (!scan_name || typeof scan_name !== 'string' || scan_name.trim().length === 0 || scan_name.length > 100) {
+      return new Response(
+        JSON.stringify({ error: "scan_name must be a non-empty string (max 100 characters)" }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    if (!target_url || typeof target_url !== 'string' || target_url.length > 500) {
+      return new Response(
+        JSON.stringify({ error: "target_url must be a valid string (max 500 characters)" }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Validate URL format
+    try {
+      new URL(target_url);
+    } catch {
+      return new Response(
+        JSON.stringify({ error: "target_url must be a valid URL" }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    const validScanTypes = ['full', 'quick', 'custom'];
+    if (!scan_type || !validScanTypes.includes(scan_type)) {
+      return new Response(
+        JSON.stringify({ error: `scan_type must be one of: ${validScanTypes.join(', ')}` }),
+        {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
 
     if (!scan_name || !target_url || !scan_type) {
       return new Response(
