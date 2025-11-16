@@ -13,6 +13,9 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["'Inter'", "-apple-system", "BlinkMacSystemFont", "'Segoe UI'", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -46,6 +49,30 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        success: "hsl(var(--success))",
+        warning: "hsl(var(--warning))",
+        error: "hsl(var(--error))",
+        info: "hsl(var(--info))",
+        "neutral": {
+          50: "hsl(210 20% 98%)",
+          100: "hsl(210 20% 96%)",
+          200: "hsl(214 15% 91%)",
+          300: "hsl(213 13% 83%)",
+          400: "hsl(215 11% 65%)",
+          DEFAULT: "hsl(215 16% 47%)",
+          600: "hsl(215 19% 35%)",
+          700: "hsl(215 25% 27%)",
+          800: "hsl(217 33% 17%)",
+          900: "hsl(222 47% 11%)",
+          950: "hsl(229 84% 5%)",
+        },
+        severity: {
+          critical: "hsl(var(--severity-critical))",
+          high: "hsl(var(--severity-high))",
+          medium: "hsl(var(--severity-medium))",
+          low: "hsl(var(--severity-low))",
+          info: "hsl(var(--severity-info))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
