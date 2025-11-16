@@ -9,6 +9,9 @@ import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Dashboard from "./pages/Dashboard";
 import NotFound from "./pages/NotFound";
+import Subscription from "./pages/Subscription";
+import VulnerabilityScanning from "./pages/VulnerabilityScanning";
+import IntegrationGuide from "./pages/IntegrationGuide";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +33,16 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/subscription"
+              element={
+                <ProtectedRoute>
+                  <Subscription />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/services/vulnerability-scanning" element={<VulnerabilityScanning />} />
+            <Route path="/services/integration" element={<IntegrationGuide />} />
             <Route path="/404" element={<NotFound />} />
             <Route path="*" element={<Navigate to="/404" replace />} />
           </Routes>
